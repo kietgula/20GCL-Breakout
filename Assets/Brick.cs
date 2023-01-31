@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Brick : MonoBehaviour
 {
+    public GameObject BrickSpawner;
     public int Health = 1;
     // Start is called before the first frame update
     void Start()
     {
-        
+        BrickSpawner = GameObject.Find("BrickSpawner");
     }
 
     // Update is called once per frame
@@ -24,6 +25,8 @@ public class Brick : MonoBehaviour
             Health--;
             if (Health <= 0)
             {
+                int thisIndex = BrickSpawner.GetComponent<BrickSpawner>().BrickList.IndexOf(gameObject);
+                BrickSpawner.GetComponent<BrickSpawner>().BrickList.RemoveAt(thisIndex);
                 Destroy(this.gameObject);
             }
         }

@@ -7,7 +7,7 @@ public class BrickSpawner : MonoBehaviour
     public GameObject RedBrickPrefab;
     public GameObject OrangeBrickPrefab;
 
-    public static List<GameObject> BrickList;
+    public List<GameObject> BrickList;
     public int Height;
     public int Wide;
 
