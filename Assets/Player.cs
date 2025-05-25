@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
         }
         else rb.velocity = new Vector2(0,0);
         
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Space))
         {
             if (Balls > 0)
                 ShootBall();

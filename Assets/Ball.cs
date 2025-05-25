@@ -3,17 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BallFallEvent: UnityEvent<int, int>
-{
-
-}
 
 public class Ball : MonoBehaviour
 {
-    public static int NumOfBall;
-    public static BallFallEvent BallFall;
-
-    GameObject gameManager;
+    GameManager gameManager;
     GameObject player;
 
     [Tooltip("this offset use for randomize direction bounce of the ball")]
@@ -23,25 +16,15 @@ public class Ball : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.BallList.Add(this.gameObject);
-
-        NumOfBall++;
-
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        
+        gameManager.BallList.Add(this.gameObject);
         rb = GetComponent<Rigidbody2D>();
 
         //* random velocity to make sure the ball is too easy to predict
         rb.velocity = new Vector2(Random.Range(-0.2f,0.2f), 1*speed);
 
         player = GameObject.Find("Player");
-        gameManager = GameObject.Find("GameManager");
-
-        if (BallFall == null)
-        {
-            BallFall = new BallFallEvent();
-            BallFall.AddListener(gameManager.GetComponent<GameManager>().GameOver);
-
-        }
-
     }
 
     // Update is called once per frame
@@ -58,14 +41,10 @@ public class Ball : MonoBehaviour
         rb.velocity = newDirection*magnitude;
         if (collision.gameObject.name == "BottomWall")
         {
-
-            NumOfBall--;
-            int thisBallIndex = GameManager.BallList.IndexOf(this.gameObject);
-            GameManager.BallList.RemoveAt(thisBallIndex);
-            int Balls = player.GetComponent<Player>().Balls;
-            BallFall.Invoke(NumOfBall, Balls);
-            
+            int thisBallIndex = gameManager.BallList.IndexOf(this.gameObject);
+            gameManager.BallList.RemoveAt(thisBallIndex);
             Destroy(this.gameObject);
+            gameManager.GameOver();
         }
         else if (collision.gameObject.tag=="Brick")
         {
